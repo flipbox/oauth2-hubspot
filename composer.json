@@ -26,8 +26,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Flipbox\\OAuth2\\Client\\Test\\": "test/src/"
+            "Flipbox\\OAuth2\\Client\\Test\\": "tests/src/"
         }
+    },
+    "config": {
+        "optimize-autoloader": true
     },
     "extra": {
         "branch-alias": {
