@@ -13,7 +13,7 @@ This package provides HubSpot OAuth 2.0 support for the PHP League's [OAuth 2.0 
 To install, use composer:
 
 ```
-composer require flipbox/oauth2-hubspot
+composer require flipboxdigital/oauth2-hubspot
 ```
 
 ## Usage
