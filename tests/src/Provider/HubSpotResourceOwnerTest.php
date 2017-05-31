@@ -1,12 +1,12 @@
 <?php namespace League\OAuth2\Client\Test\Provider;
 
-use Mockery as m;
+use Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
 
 class HubSpotResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
     public function testEmailIsNullWithoutResponse()
     {
-        $user = new \Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
+        $user = new HubSpotResourceOwner;
 
         $value = $user->getEmail();
 
@@ -15,7 +15,7 @@ class HubSpotResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testIdIsNullWithoutResponse()
     {
-        $user = new \Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
+        $user = new HubSpotResourceOwner;
 
         $value = $user->getId();
 
@@ -24,7 +24,7 @@ class HubSpotResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testHubIdIsNullWithoutResponse()
     {
-        $user = new \Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
+        $user = new HubSpotResourceOwner;
 
         $value = $user->getHubId();
 
@@ -33,7 +33,7 @@ class HubSpotResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testAppIdIsNullWithoutResponse()
     {
-        $user = new \Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
+        $user = new HubSpotResourceOwner;
 
         $value = $user->getAppId();
 
@@ -42,7 +42,7 @@ class HubSpotResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testDomainIsNullWithoutResponse()
     {
-        $user = new \Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
+        $user = new HubSpotResourceOwner;
 
         $value = $user->getDomain();
 
@@ -52,9 +52,9 @@ class HubSpotResourceOwnerTest extends \PHPUnit_Framework_TestCase
     public function testResponsePropertyMapping()
     {
         $response = [
-            'token' => uniqid().uniqid(),
-            'user' => uniqid().'@'.uniqid().'.com',
-            'hub_domain' => uniqid().'.com',
+            'token' => uniqid() . uniqid(),
+            'user' => uniqid() . '@' . uniqid() . '.com',
+            'hub_domain' => uniqid() . '.com',
             'scopes' => [
                 'contacts',
                 'content',
@@ -66,7 +66,7 @@ class HubSpotResourceOwnerTest extends \PHPUnit_Framework_TestCase
             'user_id' => rand(6, 10),
             'token_type' => 'access'
         ];
-        $user = new \Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner($response);
+        $user = new HubSpotResourceOwner($response);
 
         $this->assertEquals($response['hub_domain'], $user->getDomain());
         $this->assertEquals($response['user'], $user->getEmail());

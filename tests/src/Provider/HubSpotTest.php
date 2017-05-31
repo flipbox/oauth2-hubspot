@@ -1,15 +1,17 @@
 <?php namespace Flipbox\OAuth2\Client\Test\Provider;
 
-use Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
+use Flipbox\OAuth2\Client\Provider\HubSpot;
 use Mockery as m;
 
 class HubSpotTest extends \PHPUnit_Framework_TestCase
 {
+
+    /** @var HubSpot */
     protected $provider;
 
     protected function setUp()
     {
-        $this->provider = new \Flipbox\OAuth2\Client\Provider\HubSpot([
+        $this->provider = new HubSpot([
             'clientId' => 'mock_client_id',
             'clientSecret' => 'mock_secret',
             'redirectUri' => 'none',
@@ -41,7 +43,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function testScopes()
     {
-        $options = ['scope' => [uniqid(),uniqid()]];
+        $options = ['scope' => [uniqid(), uniqid()]];
 
         $url = $this->provider->getAuthorizationUrl($options);
 
@@ -96,9 +98,9 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
     {
 
         $params = [
-            'token' => uniqid().uniqid(),
-            'user' => uniqid().'@'.uniqid().'.com',
-            'hub_domain' => uniqid().'.com',
+            'token' => uniqid() . uniqid(),
+            'user' => uniqid() . '@' . uniqid() . '.com',
+            'hub_domain' => uniqid() . '.com',
             'scopes' => [
                 'contacts',
                 'content',
@@ -147,7 +149,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
      **/
     public function testExceptionThrownWhenErrorObjectReceived()
     {
-        $status = rand(400,600);
+        $status = rand(400, 600);
         $postResponse = m::mock('Psr\Http\Message\ResponseInterface');
         $postResponse->shouldReceive('getBody')->andReturn('{"message": "Validation Failed","errors": [{"resource": "Issue","field": "title","code": "missing_field"}]}');
         $postResponse->shouldReceive('getHeader')->andReturn(['content-type' => 'json']);
