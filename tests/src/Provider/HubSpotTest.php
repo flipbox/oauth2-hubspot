@@ -1,5 +1,6 @@
 <?php namespace Flipbox\OAuth2\Client\Test\Provider;
 
+use Flipbox\OAuth2\Client\Provider\HubSpotResourceOwner;
 use Mockery as m;
 
 class HubSpotTest extends \PHPUnit_Framework_TestCase
@@ -21,6 +22,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
+    /** @test */
     public function testAuthorizationUrl()
     {
         $url = $this->provider->getAuthorizationUrl();
@@ -36,16 +38,20 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($this->provider->getState());
     }
 
-
+    /** @test */
     public function testScopes()
     {
         $options = ['scope' => [uniqid(),uniqid()]];
 
         $url = $this->provider->getAuthorizationUrl($options);
 
-        $this->assertContains(urlencode(implode(',', $options['scope'])), $url);
+        $scopeString = implode(' ', $options['scope']);
+        $scopeQuery = http_build_query(['scope' => $scopeString], null, '&', \PHP_QUERY_RFC3986);
+
+        $this->assertContains($scopeQuery, $url);
     }
 
+    /** @test */
     public function testGetAuthorizationUrl()
     {
         $url = $this->provider->getAuthorizationUrl();
@@ -54,6 +60,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/oauth/authorize', $uri['path']);
     }
 
+    /** @test */
     public function testGetBaseAccessTokenUrl()
     {
         $params = [];
@@ -64,6 +71,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/oauth/v1/token', $uri['path']);
     }
 
+    /** @test */
     public function testGetAccessToken()
     {
         $response = m::mock('Psr\Http\Message\ResponseInterface');
@@ -83,13 +91,25 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($token->getResourceOwnerId());
     }
 
-
+    /** @test */
     public function testUserData()
     {
-        $userId = rand(1000,9999);
-        $name = uniqid();
-        $nickname = uniqid();
-        $email = uniqid();
+
+        $params = [
+            'token' => uniqid().uniqid(),
+            'user' => uniqid().'@'.uniqid().'.com',
+            'hub_domain' => uniqid().'.com',
+            'scopes' => [
+                'contacts',
+                'content',
+                'oauth'
+            ],
+            'hub_id' => rand(6, 10),
+            'app_id' => rand(6, 10),
+            'expires_in' => rand(6, 10),
+            'user_id' => rand(6, 10),
+            'token_type' => 'access'
+        ];
 
         $postResponse = m::mock('Psr\Http\Message\ResponseInterface');
         $postResponse->shouldReceive('getBody')->andReturn('access_token=mock_access_token&expires=3600&refresh_token=mock_refresh_token&otherKey={1234}');
@@ -97,7 +117,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         $postResponse->shouldReceive('getStatusCode')->andReturn(200);
 
         $userResponse = m::mock('Psr\Http\Message\ResponseInterface');
-        $userResponse->shouldReceive('getBody')->andReturn('{"id": '.$userId.', "login": "'.$nickname.'", "name": "'.$name.'", "email": "'.$email.'"}');
+        $userResponse->shouldReceive('getBody')->andReturn(json_encode($params));
         $userResponse->shouldReceive('getHeader')->andReturn(['content-type' => 'json']);
         $userResponse->shouldReceive('getStatusCode')->andReturn(200);
 
@@ -110,15 +130,16 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         $token = $this->provider->getAccessToken('authorization_code', ['code' => 'mock_authorization_code']);
         $user = $this->provider->getResourceOwner($token);
 
-        $this->assertEquals($userId, $user->getId());
-        $this->assertEquals($userId, $user->toArray()['id']);
-        $this->assertEquals($name, $user->getName());
-        $this->assertEquals($name, $user->toArray()['name']);
-        $this->assertEquals($nickname, $user->getNickname());
-        $this->assertEquals($nickname, $user->toArray()['login']);
-        $this->assertEquals($email, $user->getEmail());
-        $this->assertEquals($email, $user->toArray()['email']);
-        $this->assertContains($nickname, $user->getUrl());
+        $this->assertEquals($params['hub_id'], $user->getHubId());
+        $this->assertEquals($params['hub_id'], $user->toArray()['hub_id']);
+        $this->assertEquals($params['user_id'], $user->getId());
+        $this->assertEquals($params['user_id'], $user->toArray()['user_id']);
+        $this->assertEquals($params['app_id'], $user->getAppId());
+        $this->assertEquals($params['app_id'], $user->toArray()['app_id']);
+        $this->assertEquals($params['hub_domain'], $user->getDomain());
+        $this->assertEquals($params['hub_domain'], $user->toArray()['hub_domain']);
+        $this->assertEquals($params['user'], $user->getEmail());
+        $this->assertEquals($params['user'], $user->toArray()['user']);
     }
 
     /**
