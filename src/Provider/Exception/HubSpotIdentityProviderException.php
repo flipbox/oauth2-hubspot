@@ -51,5 +51,4 @@ class HubSpotIdentityProviderException extends IdentityProviderException
     {
         return new static($message, $response->getStatusCode(), (string) $response->getBody());
     }
-
 }

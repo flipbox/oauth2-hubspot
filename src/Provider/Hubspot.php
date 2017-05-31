@@ -120,5 +120,4 @@ class HubSpot extends AbstractProvider
     {
         return new HubSpotResourceOwner($response);
     }
-
 }

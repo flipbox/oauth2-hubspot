@@ -103,5 +103,4 @@ class HubSpotResourceOwner implements ResourceOwnerInterface
     {
         return $this->response;
     }
-
 }
