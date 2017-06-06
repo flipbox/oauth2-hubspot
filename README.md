@@ -4,7 +4,7 @@
 [![Build Status](https://img.shields.io/travis/flipbox/oauth2-hubspot/master.svg?style=flat-square)](https://travis-ci.org/flipbox/oauth2-hubspot)
 [![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/flipbox/oauth2-hubspot.svg?style=flat-square)](https://scrutinizer-ci.com/g/flipbox/oauth2-hubspot/code-structure)
 [![Quality Score](https://img.shields.io/scrutinizer/g/flipbox/oauth2-hubspot.svg?style=flat-square)](https://scrutinizer-ci.com/g/flipbox/oauth2-hubspot)
-[![Total Downloads](https://img.shields.io/packagist/dt/flipboxdigital/oauth2-hubspot.svg?style=flat-square)](https://packagist.org/packages/league/oauth2-hubspot)
+[![Total Downloads](https://img.shields.io/packagist/dt/flipboxdigital/oauth2-hubspot.svg?style=flat-square)](https://packagist.org/packages/flipboxdigital/oauth2-hubspot)
 
 This package provides HubSpot OAuth 2.0 support for the PHP League's [OAuth 2.0 Client](https://github.com/flipbox/oauth2-client).
 
