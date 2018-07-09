@@ -1,7 +1,7 @@
 {
     "name": "flipboxdigital/oauth2-hubspot",
     "description": "HubSpot OAuth 2.0 Client Provider for The PHP League OAuth2-Client",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "keywords": [
         "oauth",
